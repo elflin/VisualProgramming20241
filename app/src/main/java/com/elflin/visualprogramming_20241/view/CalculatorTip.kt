@@ -55,7 +55,9 @@ fun CalculatorTipView(){
 
         TextField(
             value = billAmount,
-            onValueChange = {billAmount = it},
+            onValueChange = {
+                billAmount = it
+                tipAmount = CalcTimAmount(billAmount, tipPercentage, roundUpTip)},
             label = {Text("Bill Amount")},
             leadingIcon = { Icon(Icons.Default.Star, contentDescription = null) },
             modifier = Modifier
@@ -66,7 +68,9 @@ fun CalculatorTipView(){
 
         TextField(
             value = tipPercentage,
-            onValueChange = {tipPercentage = it},
+            onValueChange = {
+                tipPercentage = it
+                tipAmount = CalcTimAmount(billAmount, tipPercentage, roundUpTip)},
             label = {Text("Tip Percentage")},
             leadingIcon = { Icon(Icons.Default.ShoppingCart, contentDescription = null) },
             modifier = Modifier
@@ -87,14 +91,7 @@ fun CalculatorTipView(){
                 checked = roundUpTip,
                 onCheckedChange = {
                     roundUpTip = it
-
-                    val bill = billAmount.toDoubleOrNull() ?: 0.0
-                    val tipPercent = tipPercentage.toDoubleOrNull() ?: 0.0
-                    tipAmount = bill * (tipPercent / 100)
-
-                    if (roundUpTip){
-                        tipAmount = ceil(tipAmount)
-                    }
+                    tipAmount = CalcTimAmount(billAmount, tipPercentage, roundUpTip)
                 }
             )
         }
@@ -105,6 +102,18 @@ fun CalculatorTipView(){
             style = MaterialTheme.typography.bodyLarge
         )
     }
+}
+
+fun CalcTimAmount(billAmount: String, tipPercentage: String, roundUpTip: Boolean = false): Double{
+    val bill = billAmount.toDoubleOrNull() ?: 0.0
+    val tipPercent = tipPercentage.toDoubleOrNull() ?: 0.0
+    var tipAmount = bill * (tipPercent / 100)
+
+    if (roundUpTip){
+        tipAmount = ceil(tipAmount)
+    }
+
+    return tipAmount
 }
 
 @Preview(showBackground = true, showSystemUi = true)
