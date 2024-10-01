@@ -11,6 +11,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -18,11 +19,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,7 +39,7 @@ fun CalculatorTipView(){
     var billAmount by remember { mutableStateOf("") }
     var tipPercentage by remember { mutableStateOf("") }
     var roundUpTip by remember { mutableStateOf(false) }
-    var tipAmount by remember { mutableStateOf(0.0) }
+    var tipAmount by remember { mutableDoubleStateOf(0.0) }
 
     Column(
         verticalArrangement = Arrangement.Center,
@@ -101,6 +104,20 @@ fun CalculatorTipView(){
             fontSize = 24.sp,
             style = MaterialTheme.typography.bodyLarge
         )
+
+        Button(
+            onClick = {
+                tipAmount = CalcTimAmount(billAmount, tipPercentage, roundUpTip)
+            },
+            modifier = Modifier
+                .padding(vertical = 16.dp)
+                .fillMaxWidth()
+        ) {
+            Text(
+                "Calculate",
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.bodyLarge)
+        }
     }
 }
 
