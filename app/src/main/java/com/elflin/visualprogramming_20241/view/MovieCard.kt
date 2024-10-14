@@ -37,10 +37,10 @@ import com.elflin.visualprogramming_20241.data.DataSource
 import com.elflin.visualprogramming_20241.model.Movie
 
 @Composable
-fun MovieCard(movie: Movie){
-
-    var isLiked by rememberSaveable { mutableStateOf(movie.isLiked) }
-
+fun MovieCard(
+    movie: Movie,
+    onLikeClick: () -> Unit = {}
+){
     Card(
         modifier = Modifier
             .padding(4.dp)
@@ -61,21 +61,14 @@ fun MovieCard(movie: Movie){
                 )
 
                 FloatingActionButton(
-                    onClick = {
-                        if(movie.isLiked){
-                            movie.isLiked = false
-                        }else{
-                            movie.isLiked = true
-                        }
-                        isLiked = movie.isLiked
-                    },
+                    onClick = onLikeClick,
                     shape = CircleShape,
                     modifier = Modifier.padding(end = 4.dp, bottom = 4.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Favorite,
                         contentDescription = "Fav",
-                        tint = if(isLiked){
+                        tint = if(movie.isLiked){
                             Color(0xFFEC407A)
                         }else{
                             Color(0xFF787878)

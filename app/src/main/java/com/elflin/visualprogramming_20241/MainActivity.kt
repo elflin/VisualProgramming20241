@@ -75,7 +75,7 @@ class MainActivity : ComponentActivity() {
                         )
                     },
                 ) { innerPadding ->
-                    ListMovieView(DataSource().loadMovie(), Modifier.padding(innerPadding))
+                    ListMovieView(Modifier.padding(innerPadding))
                 }
             }
         }
