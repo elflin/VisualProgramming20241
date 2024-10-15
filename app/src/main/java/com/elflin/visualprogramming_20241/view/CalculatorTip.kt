@@ -18,11 +18,8 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -31,20 +28,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlin.math.ceil
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.elflin.visualprogramming_20241.viewmodel.CalculatorTipViewModel
 
 @Composable
-fun CalculatorTipView(){
-
-    var billAmount by remember { mutableStateOf("") }
-    var tipPercentage by remember { mutableStateOf("") }
-    var roundUpTip by remember { mutableStateOf(false) }
-    var tipAmount by remember { mutableDoubleStateOf(0.0) }
+fun CalculatorTipView(
+    modifier: Modifier = Modifier,
+    viewModel: CalculatorTipViewModel = viewModel()
+){
+    val calculatorUIState by viewModel.calculatorUIState.collectAsState()
 
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(24.dp)
     ) {
@@ -57,10 +54,8 @@ fun CalculatorTipView(){
         )
 
         TextField(
-            value = billAmount,
-            onValueChange = {
-                billAmount = it
-                tipAmount = CalcTimAmount(billAmount, tipPercentage, roundUpTip)},
+            value = calculatorUIState.billAmount.toString(),
+            onValueChange = {viewModel.setBillAmount(it)},
             label = {Text("Bill Amount")},
             leadingIcon = { Icon(Icons.Default.Star, contentDescription = null) },
             modifier = Modifier
@@ -70,10 +65,8 @@ fun CalculatorTipView(){
         )
 
         TextField(
-            value = tipPercentage,
-            onValueChange = {
-                tipPercentage = it
-                tipAmount = CalcTimAmount(billAmount, tipPercentage, roundUpTip)},
+            value = calculatorUIState.tipPercentage.toString(),
+            onValueChange = {viewModel.setTipPercentage(it)},
             label = {Text("Tip Percentage")},
             leadingIcon = { Icon(Icons.Default.ShoppingCart, contentDescription = null) },
             modifier = Modifier
@@ -91,24 +84,19 @@ fun CalculatorTipView(){
             Text(text = "Round up tip?")
             Spacer(modifier = Modifier.weight(1f))
             Switch(
-                checked = roundUpTip,
-                onCheckedChange = {
-                    roundUpTip = it
-                    tipAmount = CalcTimAmount(billAmount, tipPercentage, roundUpTip)
-                }
+                checked = calculatorUIState.roundUpTip,
+                onCheckedChange = {viewModel.setRoundUpTip(it)}
             )
         }
 
         Text(
-            text = "Tip Amount : $${tipAmount}",
+            text = "Tip Amount : $${calculatorUIState.tipAmount}",
             fontSize = 24.sp,
             style = MaterialTheme.typography.bodyLarge
         )
 
         Button(
-            onClick = {
-                tipAmount = CalcTimAmount(billAmount, tipPercentage, roundUpTip)
-            },
+            onClick = {viewModel.CalcTimAmount()},
             modifier = Modifier
                 .padding(vertical = 16.dp)
                 .fillMaxWidth()
@@ -119,18 +107,6 @@ fun CalculatorTipView(){
                 style = MaterialTheme.typography.bodyLarge)
         }
     }
-}
-
-fun CalcTimAmount(billAmount: String, tipPercentage: String, roundUpTip: Boolean = false): Double{
-    val bill = billAmount.toDoubleOrNull() ?: 0.0
-    val tipPercent = tipPercentage.toDoubleOrNull() ?: 0.0
-    var tipAmount = bill * (tipPercent / 100)
-
-    if (roundUpTip){
-        tipAmount = ceil(tipAmount)
-    }
-
-    return tipAmount
 }
 
 @Preview(showBackground = true, showSystemUi = true)
