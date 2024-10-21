@@ -9,12 +9,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.elflin.visualprogramming_20241.route.listScreen
 import com.elflin.visualprogramming_20241.viewmodel.ListMovieViewModel
 
 @Composable
 fun ListMovieView(
     modifier: Modifier = Modifier,
-    viewModel: ListMovieViewModel = viewModel()
+    viewModel: ListMovieViewModel = viewModel(),
+    navController: NavController? = null
 ){
 
     val movies by viewModel.movies.collectAsState()
@@ -26,7 +29,8 @@ fun ListMovieView(
         items(movies){ movie ->
             MovieCard(
                 movie,
-                onLikeClick = { viewModel.toggleButtonLike(movie) }
+                onLikeClick = { viewModel.toggleButtonLike(movie) },
+                onCardClick = { navController?.navigate(listScreen.MovieDetail.name+"/${movie.title}") }
             )
         }
     }

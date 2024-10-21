@@ -1,5 +1,6 @@
 package com.elflin.visualprogramming_20241.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.elflin.visualprogramming_20241.model.CalculatorUIState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +31,7 @@ class CalculatorTipViewModel(): ViewModel(){
         val bill = calculatorUIState.value.billAmount.toFloat()
         val tipPercent = calculatorUIState.value.tipPercentage.toFloat()
         var tipAmount = bill * (tipPercent / 100)
-
+        Log.d("ValueBill", tipAmount.toString())
         if (calculatorUIState.value.roundUpTip){
             tipAmount = ceil(tipAmount)
         }

@@ -1,6 +1,7 @@
 package com.elflin.visualprogramming_20241.view
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,13 +40,15 @@ import com.elflin.visualprogramming_20241.model.Movie
 @Composable
 fun MovieCard(
     movie: Movie,
-    onLikeClick: () -> Unit = {}
+    onLikeClick: () -> Unit = {},
+    onCardClick: () -> Unit = {}
 ){
     Card(
         modifier = Modifier
             .padding(4.dp)
             .fillMaxWidth(),
-        elevation = CardDefaults.elevatedCardElevation(8.dp)
+        elevation = CardDefaults.elevatedCardElevation(8.dp),
+        onClick = onCardClick
     ) {
         Column {
             Box(
