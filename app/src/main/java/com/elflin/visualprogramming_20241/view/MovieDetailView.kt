@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -30,23 +31,29 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.elflin.visualprogramming_20241.data.DataSource
+import com.elflin.visualprogramming_20241.repository.MovieDBContainer
 import com.elflin.visualprogramming_20241.viewmodel.MovieDetailViewModel
 
 @Composable
 fun MovieDetailView(
-    title: String,
+    id: Int,
     viewModel: MovieDetailViewModel = viewModel()
 ){
-    viewModel.setMovie(title)
+    viewModel.setMovie(id)
     val movie by viewModel.movie.collectAsState()
 
     Column {
         Box(
             contentAlignment = Alignment.BottomEnd
         ) {
-            Image(
-                painter = painterResource(movie.posterPath.toInt()),
+            AsyncImage(
+                model = ImageRequest.Builder(context = LocalContext.current)
+                    .data(MovieDBContainer.BASE_IMG + movie.posterPath)
+                    .crossfade(true)
+                    .build(),
                 contentDescription = "Movie image",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -87,7 +94,7 @@ fun MovieDetailView(
             )
 
             Text(
-                text = "(${movie.getYear()})",
+                text = "(2024)",
                 textAlign = TextAlign.Right,
                 modifier = Modifier.weight(1f)
             )
@@ -120,5 +127,5 @@ fun MovieDetailView(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun MovieDetailPreview(){
-    MovieDetailView(DataSource().loadMovie()[2].title)
+//    MovieDetailView(DataSource().loadMovie()[2].title)
 }

@@ -30,7 +30,7 @@ fun ListMovieView(
             MovieCard(
                 movie,
                 onLikeClick = { viewModel.toggleButtonLike(movie) },
-                onCardClick = { navController?.navigate(listScreen.MovieDetail.name+"/${movie.title}") }
+                onCardClick = { navController?.navigate(listScreen.MovieDetail.name+"/${movie.id}") }
             )
         }
     }
